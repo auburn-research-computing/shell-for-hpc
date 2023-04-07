@@ -8,7 +8,6 @@ Syntax, scripting, and automation patterns used frequently in high performance c
   <source src="https://youtu.be/EkPCKVaJ68Q" type="video/mp4">
 </video>
 
-
 ## Common Research Use Cases
 
 Native Linux CLI tools enable core research functions and accelerate experimentation:
