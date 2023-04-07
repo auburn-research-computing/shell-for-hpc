@@ -4,7 +4,7 @@
 
 Syntax, scripting, and automation patterns used frequently in high performance computing environments for reducing experimentation time, workflow repetition, and data processing overhead
 
-[](https://youtu.be/EkPCKVaJ68Q" "AUHPC Event :: CLI Tools & Techniques")
+[![AUHPC](https://img.youtube.com/vi/EkPCKVaJ68Q/0.jpg)](https://www.youtube.com/watch?v=EkPCKVaJ68Q" "AUHPC Event :: CLI Tools & Techniques")
 
 ## Common Research Use Cases
 
