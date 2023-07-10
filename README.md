@@ -114,6 +114,7 @@ for number in "1 2 3 4 5"; do
   echo "line ${number}" 
 done -->
 
+<!-- I'd recommed putting this under a heading of command substitition -->
 #### Subshells
 
 The general syntax is: $(<command> <required_parameters> [optional_parameters])
@@ -168,3 +169,46 @@ tail -10  data/raw/complaints.04062023.081145.csv | cut -d',' -f1
 tail -10  data/raw/complaints.04062023.081145.csv | grep -ve "^[A-Za-z]" | cut -d',' -f1
 
 awk -v FPAT='(".+")||([^,]+)||(^[ ]*$)'
+
+#### **Checkpointing**
+
+A very simple example of checkpointing - you can assume Linux for this.
+Exactly how you do checkpoint your job (or if you can/should) will vary drastically based on what you are actually doing.
+The files used for this example are in the checkpoint_example folder in this repository.
+Download them to your local directory to follow along with the example.
+
+To start lets assume we have (or can make) a list of repetitive things our job needs to do.
+These could be files, variable names, gene names, accesion numbers ... it really doesn't matter.
+We want to do something for each item in that list and if the job doing it gets killed/cancelled/requeued we don't want to have to start over from the begining.
+Checkpointing to the rescue.
+
+
+Copy the files from the checkpoint directory.
+original.lst has 13k unique entries that we need to iterate through.
+Create a copy of original.lst named working.lst in the same directory. 
+This is a direct copy of is the file we're actually going to work with - NOT the original .lst
+
+From that directory run:
+screen -dm -S decrement ./cp_example.sh
+watch -n 2 "wc -l original.lst; wc -l working.lst; wc -l progress.log"
+
+explanation:
+The first command starts a new screen session in detached mode, names it iterate, and runs our script iterate.sh within it.
+The second command does a wc -l (word count - lines) on 3 files and pushes it through 'watch -n 2' which runs the command every 2 seconds.
+
+You should see the working.lst counting down and the progress.log counting up.
+
+Hit ctrl-c to stop the watch and enter the following:
+screen -S decrement -X quit
+
+explanation:
+We're telling screen to end the session named decrement.
+This is to simulate this having been running as a slurm job and it getting preempted and requeued.
+
+Now we want to simulate what happens when slurm restarts it.  Run the first 2 commands again.
+
+screen -dm -S decrement ./cp_example.sh
+watch -n 2 "wc -l original.lst; wc -l working.lst; wc -l progress.log"
+
+Note that working.lst doesn't start at 13k; it starts where it left off.
+
